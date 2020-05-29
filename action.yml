@@ -1,0 +1,24 @@
+name: 'PR ShellCheck'
+description: 'Run ShellCheck on PR files'
+inputs:
+  GITHUB_TOKEN:
+    description: 'GitHub token'
+    required: true
+  severity:
+    description: 'Minimum severity of errors to consider'
+    required: false
+    default: 'style'
+  exclude:
+    description: 'Exclude types of warnings'
+    required: false
+    default: ''
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.GITHUB_TOKEN }}
+    - ${{ inputs.severity }}
+    - ${{ inputs.exclude }}
+branding:
+  icon: 'tag'
+  color: 'green'
