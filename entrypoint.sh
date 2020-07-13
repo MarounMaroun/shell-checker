@@ -15,7 +15,7 @@ echo "---= Running on PR #$pr_num =---"
 body=$(curl -sSL -H "Authorization: token $token" -H "$GITHUB_API_HEADER" "$GITHUB_API_URI/repos/$GITHUB_REPOSITORY/pulls/$pr_num/files")
 
 err=0
-for file in $(echo "$body" | jq -r '.[].filename'); do
+for file in $(echo "$body" | jq -r 'map(select(.status != "removed")) | .[].filename'); do
   extension=$(echo "$file" | awk -F . '{print $NF}')
   if [[ "$extension" =~ (sh|bash|zsh|ksh) ]]; then
     shellcheck -e "$exclude" -S "$severity" "$GITHUB_WORKSPACE/$file" || err=$?
